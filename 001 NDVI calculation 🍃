@@ -85,3 +85,4 @@ if __name__ == "__main__":
     # Run NDVI calculation for both years
     calculate_ndvi(input_2014, output_2014)
     calculate_ndvi(input_2019, output_2019)
+// Final step is to import the image to QGIS or ArcGIS for futher analysis
