@@ -1,0 +1,87 @@
+
+NDVI Calculation from Landsat 8 Images (2014 & 2019)
+Author: Nyran Tahija
+Description:
+    This script calculates the Normalized Difference Vegetation Index (NDVI)
+    for Landsat 8 images from 2014 and 2019 using bands 4 (Red) and 5 (NIR).
+    Results are exported as GeoTIFF and visualized.
+"""
+
+# =========================
+# Import Required Libraries
+# =========================
+import os
+import rasterio
+from rasterio import plot
+import matplotlib.pyplot as plt
+import numpy as np
+
+# =========================
+# Define Function for NDVI
+# =========================
+def calculate_ndvi(input_dir, output_file):
+    """
+    Calculate NDVI from Landsat 8 Red (Band 4) and NIR (Band 5) bands.
+
+    Parameters:
+        input_dir (str): Path to the folder containing band 4 and band 5 files.
+        output_file (str): Output path for NDVI GeoTIFF.
+    """
+    # List files in the directory
+    files = os.listdir(input_dir)
+    red_file = [f for f in files if "_B4" in f][0]
+    nir_file = [f for f in files if "_B5" in f][0]
+
+    # Open raster bands
+    os.chdir(input_dir)
+    band4 = rasterio.open(red_file)  # Red
+    band5 = rasterio.open(nir_file)  # NIR
+
+    # Convert to float64 arrays
+    red = band4.read(1).astype("float64")
+    nir = band5.read(1).astype("float64")
+
+    # NDVI calculation
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ndvi = np.true_divide((nir - red), (nir + red))
+        ndvi[(nir + red) == 0] = 0  # handle division by zero
+
+    # Save NDVI as GeoTIFF
+    with rasterio.open(
+        output_file,
+        "w",
+        driver="GTiff",
+        width=band4.width,
+        height=band4.height,
+        count=1,
+        crs=band4.crs,
+        transform=band4.transform,
+        dtype="float64"
+    ) as ndvi_dst:
+        ndvi_dst.write(ndvi, 1)
+
+    # Plot NDVI
+    with rasterio.open(output_file) as ndvi_img:
+        fig = plt.figure(figsize=(10, 6))
+        plot.show(ndvi_img, cmap="RdYlGn")  # Green = healthy, Red = unhealthy
+        plt.title(f"NDVI - {os.path.basename(output_file).split('.')[0]}")
+        plt.show()
+
+    print(f"NDVI calculation complete → {output_file}")
+
+
+# =========================
+# Main Workflow
+# =========================
+if __name__ == "__main__":
+    # Path to 2014 Landsat image (clipped bands)
+    input_2014 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20140205clip"
+    output_2014 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\ndvi_2014.tif"
+
+    # Path to 2019 Landsat image (clipped bands)
+    input_2019 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20190203clip"
+    output_2019 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\ndvi_2019.tif"
+
+    # Run NDVI calculation for both years
+    calculate_ndvi(input_2014, output_2014)
+    calculate_ndvi(input_2019, output_2019)
