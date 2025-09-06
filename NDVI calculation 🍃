@@ -1,0 +1,244 @@
+In [2]:
+# The task of the assignment is to calculate NDVI from a landsat8 image of 2014 
+In [3]:
+# Important or required packages 
+import os
+import rasterio 
+from rasterio import plot
+import matplotlib.pyplot as plt 
+import numpy as np
+In [4]:
+path = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20140205clip"
+In [5]:
+p = os.listdir(path)
+In [6]:
+#To view band 4 and band 5
+p 
+Out[6]:
+['LC08_L1TP_029047_20140205_20170307_01_T1_B4_clip.TIF',
+ 'LC08_L1TP_029047_20140205_20170307_01_T1_B5_clip.TIF']
+In [7]:
+p[0]
+Out[7]:
+'LC08_L1TP_029047_20140205_20170307_01_T1_B4_clip.TIF'
+In [8]:
+p[1]
+Out[8]:
+'LC08_L1TP_029047_20140205_20170307_01_T1_B5_clip.TIF'
+In [9]:
+os.chdir(path)
+In [10]:
+band4 = rasterio.open(p[0])
+band5 = rasterio.open(p[1])
+In [11]:
+#number of raster rows 
+band4.height
+Out[11]:
+610
+In [12]:
+#number of raster columns 
+band5.width
+Out[12]:
+597
+In [13]:
+#this script includes coordinate reference system of the images of band4 
+band4.crs 
+Out[13]:
+CRS.from_wkt('PROJCS["WGS 84 / UTM zone 13N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-105],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32613"]]')
+In [14]:
+band5.crs
+Out[14]:
+CRS.from_wkt('PROJCS["WGS 84 / UTM zone 13N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-105],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32613"]]')
+In [15]:
+#plot the band 
+plot.show(band4)
+
+￼
+Out[15]:
+<Axes: >
+In [16]:
+plot.show(band5)
+
+￼
+Out[16]:
+<Axes: >
+In [17]:
+band4.indexes
+Out[17]:
+(1,)
+In [18]:
+band4.read(1)
+Out[18]:
+array([[   0, 6778, 6693, ..., 7346, 7352, 7358],
+       [   0, 6360, 6683, ..., 7504, 7324, 7322],
+       [   0, 6229, 6619, ..., 8206, 7324, 7531],
+       ...,
+       [   0, 7650, 7877, ..., 6656, 6725, 7402],
+       [   0, 8078, 7458, ..., 6494, 6750, 7169],
+       [   0,    0,    0, ...,    0,    0,    0]], dtype=uint16)
+In [20]:
+#multiple band representation
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+plot.show(band4, ax=ax1, cmap='Blues') #red
+plot.show(band5, ax=ax2, cmap='Blues') #nir
+fig.tight_layout()
+
+￼
+In [21]:
+#Generate nir and red objects as arrays in float64 format
+red = band4.read(1).astype('float64')
+nir = band5.read(1).astype('float64')
+In [22]:
+# NDVI calculation
+ndvi = np.where(
+    (nir + red) == 0,
+    0,
+    (nir - red) / (nir + red)
+)
+ndvi[:5,:5]
+
+C:\Users\Nyran Tahija\AppData\Local\Temp\ipykernel_17000\845831420.py:5: RuntimeWarning: invalid value encountered in divide
+  (nir - red) / (nir + red)
+Out[22]:
+array([[0.        , 0.35881184, 0.34987858, 0.35558753, 0.35445122],
+       [0.        , 0.26833477, 0.29921879, 0.34208249, 0.35493248],
+       [0.        , 0.21868924, 0.26011625, 0.2382817 , 0.2321249 ],
+       [0.        , 0.23613585, 0.26941363, 0.22488212, 0.17615682],
+       [0.        , 0.28409601, 0.27232117, 0.24541908, 0.22748225]])
+In [23]:
+# Calculating NDVI
+import numpy as np
+with np.errstate(divide='ignore', invalid='ignore'):
+    ndvi = np.where(
+        (nir + red) == 0,
+        0,
+        (nir - red) / (nir + red)
+    )
+ndvi[:5,:5]
+Out[23]:
+array([[0.        , 0.35881184, 0.34987858, 0.35558753, 0.35445122],
+       [0.        , 0.26833477, 0.29921879, 0.34208249, 0.35493248],
+       [0.        , 0.21868924, 0.26011625, 0.2382817 , 0.2321249 ],
+       [0.        , 0.23613585, 0.26941363, 0.22488212, 0.17615682],
+       [0.        , 0.28409601, 0.27232117, 0.24541908, 0.22748225]])
+In [25]:
+# Define output path
+output_path = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\ndvi_2014.tif"
+# Write NDVI to file
+with rasterio.open(
+    output_path,
+    'w',
+    driver='GTiff',
+    width=band4.width,
+    height=band4.height,
+    count=1,
+    crs=band4.crs,
+    transform=band4.transform,
+    dtype='float64'
+) as ndvi_dst:
+    ndvi_dst.write(ndvi, 1)
+In [26]:
+# Open exported NDVI and plot it
+with rasterio.open(output_path) as ndvi_img:
+    fig = plt.figure(figsize=(10, 6))
+    plot.show(ndvi_img, cmap='RdYlGn')  # Green = healthy, Red = unhealthy vegetation
+
+￼
+In [27]:
+# The second task of the assignment is to calculate NDVI from a landsat8 image of 2019
+In [30]:
+ndvi2019 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20190203clip"
+In [31]:
+p = os.listdir(ndvi2019)
+In [32]:
+# list all the files in a specfied directories 
+p
+Out[32]:
+['LC08_L1TP_029047_20190203_20190206_01_T1_B4_clip.TIF',
+ 'LC08_L1TP_029047_20190203_20190206_01_T1_B5_clip.TIF']
+In [33]:
+# view the files 
+p[0]
+Out[33]:
+'LC08_L1TP_029047_20190203_20190206_01_T1_B4_clip.TIF'
+In [34]:
+p[1]
+Out[34]:
+'LC08_L1TP_029047_20190203_20190206_01_T1_B5_clip.TIF'
+In [35]:
+os.chdir(ndvi2019)
+In [36]:
+band4 = rasterio.open(p[0])
+band5 = rasterio.open(p[1])
+In [37]:
+#number of raster rows 
+band4.height
+Out[37]:
+610
+In [38]:
+#number of raster columns 
+band5.width
+Out[38]:
+597
+In [39]:
+#this script includes coordinate reference system of the images of band4 
+band4.crs 
+Out[39]:
+CRS.from_wkt('PROJCS["WGS 84 / UTM zone 13N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-105],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32613"]]')
+In [40]:
+band5.crs
+Out[40]:
+CRS.from_wkt('PROJCS["WGS 84 / UTM zone 13N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-105],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32613"]]')
+In [41]:
+#plot the band 
+plot.show(band4)
+
+￼
+Out[41]:
+<Axes: >
+In [42]:
+plot.show(band5)
+
+￼
+Out[42]:
+<Axes: >
+In [43]:
+#The next step is to plot two image to observe the NDVI bands
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+plot.show(band4, ax=ax1, cmap='Blues') #red
+plot.show(band5, ax=ax2, cmap='Blues') #nir
+fig.tight_layout()
+
+￼
+In [44]:
+#Generate nir and red objects as arrays in float64 format
+red = band4.read(1).astype('float64')
+nir = band5.read(1).astype('float64')
+In [45]:
+# Calculate NDVI Images using the bands
+with np.errstate(divide='ignore', invalid='ignore'):
+    ndvi = np.true_divide((nir - red), (nir + red))
+    ndvi[(nir + red) == 0] = 0
+In [46]:
+# #export ndvi image
+import rasterio
+import numpy as np
+output_path = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\ndvi_2019.tif"
+with rasterio.open(
+    output_path,
+    'w',
+    driver='GTiff',
+    width=band4.width,
+    height=band4.height,
+    count=1,
+    crs=band4.crs,
+    transform=band4.transform,
+    dtype='float64'
+) as ndvi_dst:
+    ndvi_dst.write(ndvi, 1)
+In [47]:
+# Open exported NDVI and plot it
+with rasterio.open(output_path) as ndvi_img:
+    fig = plt.figure(figsize=(10, 6))
+    plot.show(ndvi_img, cmap='RdYlGn')  # Green = healthy, Red = unhealthy vegetation
+ 
