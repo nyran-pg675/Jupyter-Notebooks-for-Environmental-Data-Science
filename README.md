@@ -1,1 +1,1 @@
-Aim to provide a step by step workflow on python codes
+Aim to provide a step by step workflow of python code
