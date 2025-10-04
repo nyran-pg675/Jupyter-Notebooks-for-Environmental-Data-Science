@@ -70,12 +70,11 @@ def calculate_ndvi(input_dir, output_file):
 
 if __name__ == "__main__":
     # Path to 2014 Landsat image (clipped bands)
-    input_2014 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20140205clip"
-    output_2014 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\ndvi_2014.tif"
-
+    input_2014 = 
+    output_2014 = 
     # Path to 2019 Landsat image (clipped bands)
-    input_2019 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20190203clip"
-    output_2019 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\ndvi_2019.tif"
+    input_2019 = 
+    output_2019 = 
 
     # Run NDVI calculation for both years
     calculate_ndvi(input_2014, output_2014)
