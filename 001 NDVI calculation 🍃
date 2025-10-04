@@ -70,11 +70,11 @@ def calculate_ndvi(input_dir, output_file):
 
 if __name__ == "__main__":
     # Path to 2014 Landsat image (clipped bands)
-    input_2014 = 
-    output_2014 = 
+    input_2014 = Paste file here
+    output_2014 = Paste file here
     # Path to 2019 Landsat image (clipped bands)
-    input_2019 = 
-    output_2019 = 
+    input_2019 = Paste file here
+    output_2019 = Paste file here
 
     # Run NDVI calculation for both years
     calculate_ndvi(input_2014, output_2014)
