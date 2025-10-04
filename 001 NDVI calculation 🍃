@@ -1,26 +1,21 @@
-
 NDVI Calculation from Landsat 8 Images (2014 & 2019)
-Author: Nyran Tahija
 Description:
     This script calculates the Normalized Difference Vegetation Index (NDVI)
     for Landsat 8 images from 2014 and 2019 using bands 4 (Red) and 5 (NIR).
-    Results are exported as GeoTIFF and visualized.
-"""
+    Results are exported as GeoTIFF and visualized
 
-# =========================
 # Import Required Libraries
-# =========================
 import os
 import rasterio
 from rasterio import plot
 import matplotlib.pyplot as plt
 import numpy as np
 
-# =========================
+
 # Define Function for NDVI
-# =========================
+
 def calculate_ndvi(input_dir, output_file):
-    """
+
     Calculate NDVI from Landsat 8 Red (Band 4) and NIR (Band 5) bands.
 
     Parameters:
@@ -70,9 +65,9 @@ def calculate_ndvi(input_dir, output_file):
     print(f"NDVI calculation complete → {output_file}")
 
 
-# =========================
+
 # Main Workflow
-# =========================
+
 if __name__ == "__main__":
     # Path to 2014 Landsat image (clipped bands)
     input_2014 = r"C:\Users\Nyran Tahija\Desktop\AHSIS projects notes\Project work\Assignment data practice\NDVI_CHANGE_DETECTION_DATA\NDVI_CHANGE_DETECTION_DATA\landCoverChangeAnalysisWithPython\Image20140205clip"
@@ -85,4 +80,5 @@ if __name__ == "__main__":
     # Run NDVI calculation for both years
     calculate_ndvi(input_2014, output_2014)
     calculate_ndvi(input_2019, output_2019)
+
 // Final step is to import the image to QGIS or ArcGIS for futher analysis
