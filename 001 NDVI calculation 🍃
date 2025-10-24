@@ -1,3 +1,5 @@
+// note: path = "C:/Users/Nyran Tahija/Desktop/AHSIS projects notes/Project work/Study Area Shapefile/District boundary kashmir.shp" (# use || or r, / for windows = \ an error)
+
 NDVI Calculation from Landsat 8 Images (2014 & 2019)
 Description:
     This script calculates the Normalized Difference Vegetation Index (NDVI)
