@@ -1,0 +1,28 @@
+# F-String
+name = "Nyran"
+age = 25
+print(f"My name is {name} and I am {age} years old")
+
+# Multi line F-string
+email = 'nyrantahija@gmail.com'
+
+message = f"""
+My name is {name}
+I am {age} years old
+My email is {email}
+"""
+print(message)
+
+# Mathematical operation
+a = 5
+b = 10
+print(f" sum: {a + b}") # Always rememeber to put curly bracket
+
+# Function
+def greet(name):
+    print(f"Hello, {name}!")
+greet("Nyran")
+
+def word_length(word):
+    return len(word)
+print(word_length("Hello"))
