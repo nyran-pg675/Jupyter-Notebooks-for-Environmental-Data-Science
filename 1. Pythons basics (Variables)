@@ -1,0 +1,57 @@
+# variables in python
+# Variables refers to labels container that hold information we want to use in our programming
+name = "Nyran"
+print(name)
+
+x = 10
+print(10)
+
+# Rules for python
+# How to declare variables in python
+# Variables must be A-z or a-z
+# Cannot use number infornt of variables, can use underscore
+# Very Sensitive
+
+# Data Types
+
+#String
+name = "Nyran"
+print(type(name))
+
+# Interger
+a = 10
+print(type(a))
+
+# Float
+x = 20.4
+print(type(x))
+
+# Boolean
+is_student = True
+print(type(is_student))
+
+# list() ordered, changeable, allow duplicate
+fruits = ["apple", "banana", "cherry"] # Square bracket
+print(fruits)
+print(type(fruits))
+
+# tuple() ordered, unchangeable, allow duplicate
+fruits = ("apple", "banana", "cherry") # Parenthesis
+print(fruits)
+print(type(fruits))
+
+# set() unordered, unchangeable, no duplicate
+fruits = {"apple", "banana", "cherry","apple"} # Curly bracket
+print(fruits)
+print(type(fruits))
+
+# dictionary () unordered, changeable, no duplicate
+fruits = {"name" : "apple", "color" : "red"} # Cury bracket, [] = variable inside dict
+print(fruits)
+print(type(fruits))
+print(fruits["name"])
+print(fruits["color"])
+del fruits["name"]  # delete name
+print(fruits)
+fruits["color"] = "Yellow"  # Change a value
+print(fruits["color"])
